@@ -1,0 +1,6 @@
+node_modules/
+public/
+package.json
+package-lock.json
+README.md
+vite.config.js

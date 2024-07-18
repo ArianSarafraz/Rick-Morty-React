@@ -1,0 +1,74 @@
+<!-- !-------------                        POINTS                    -------------------- -->
+<!-- props drilling : when we want to pass a prop to for example a grandchildren component -->
+<!-- A ,B ,C, D ,E : some of these components do not need the state defined in the parent component -->
+<!-- they are only the connection between them => drilling -->
+
+<!--?the purpose of component composition is to remove the extra and unwanted layers for accessing the -->
+<!-- ? inner layer.... terminating the component drilling -->
+
+<!-- !    pure function , impure funtion , memo => search about them -->
+<!-- ?   pure component -->
+
+<!-- Render Logic : pure render logic -->
+
+<!-- do not perform network req -->
+<!-- do not create time -->
+<!-- do not access dom api -->
+<!-- do not mutate object,state,props ! -->
+
+//? side effects are dealt with inside event handlers and useEffect hook
+<!-- ----------------------------------------------------------------------------------------- -->
+
+<!-- ? do not fetch the api this way: -->
+
+//fetch("https://rickandmortyapi.com/api/character") // .then((res) =>
+res.json()) // .then(data => setCharacters(data.results))
+
+<!--?fetch api , timer , access to DOM => Effects => 1. event handlers 2. useEffect -->
+
+<!--! setter function must not be placed in the logic render section -->
+
+// useEffect(() => { // fetch("https://rickandmortyapi.com/api/character") //
+.then((res) => res.json()) // .then((data) => setCharacters(data.results)); //
+}, []); //async await instead of then catch // without the dependency array =>
+the fetch process would be out of control and result in numerous reqs // const
+handleCharacters = () => { // fetch("https://rickandmortyapi.com/api/character")
+// .then((res) => res.json()) // .then((data) =>
+setCharacters(data.results.slice(0 , 3))) // }
+
+<!-- <button className="btn btn-primary" onClick={handleCharacters}>click here</button> -->
+
+useEffect(() => { setIsLoading(true); async function fetchData() { try { const
+res = await fetch("https://rickandmortyapi.com/api/character"); //
+console.log(res); if (!res.ok) throw new Error("something went wrong..."); const
+data = await res.json(); setCharacters(data.results); } catch (err) { // real
+project : err.response.data.message toast.error(err.message); } finally{
+setIsLoading(false); } } fetchData(); setIsLoading(false); }, []);
+
+<!-- dependency array : when to run effect function
+ 1. useEffect(()= > {}) : on every render
+ 2. useEffect(()=>{},[]) : only on mount
+ 3. useEffect(()=>{},[state , props]) : dep array changes =>  runs effect function
+ ? the problem of useEffect is that it causes extra re-renders witch is unwanted...
+ ? It is recommended to use the eventHandlers for the discussed purposes... -->
+<!-- ! visit the react official website -->
+
+useEffect(() => { console.log("render many times"); }); useEffect(() => {
+console.log("render only on the mount"); } , []); useEffect(() =>{
+console.log("renders when query updates"); } , [query]); console.log("RENDERING
+COMPONENT");
+<!-- ---------------------------------------------------------------------------------------- -->
+<!-- ? CLEAN UP FUTNION  -->
+<!--when? => 
+    1.unmount component  
+  
+    2.before the next re-render(between re-renders) -->
+
+    <!-- where to use ?  => effect : after unmount or while re-rendering -->
+
+
+
+                                    <!-- ?   CUSTOM HOOKS  -->
+
+// 1. must be started with the use keywrod : useFetch , useLocalStorage
+// 2. at leat one hook needs to be included in the custom hook
